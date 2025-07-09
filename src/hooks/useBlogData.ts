@@ -44,17 +44,50 @@ export const useBlogData = () => {
 
   async function loadData() {
     setLoading(true);
-    // Buscar categorias
-    const { data: catData } = await supabase.from('categories').select('*');
-    setCategories(catData || []);
-    // Buscar posts (com join de autor e categoria)
-    const { data: postData } = await supabase
-      .from('posts')
-      .select('*, author:authors(*), category:categories(*)')
-      .eq('status', 'published')
-      .order('published_at', { ascending: false });
-    setPosts(postData || []);
-    setLoading(false);
+    try {
+      // Buscar categorias
+      const { data: catData, error: catError } = await supabase.from('categories').select('*');
+      if (catError) {
+        console.error('Erro ao buscar categorias:', catError);
+      }
+      setCategories(catData || []);
+      
+      // Buscar posts (com join de autor e categoria)
+      try {
+        const { data: postData, error: postError } = await supabase
+          .from('posts')
+          .select('*, author:authors(*), category:categories(*)')
+          .eq('status', 'published')
+          .order('published_at', { ascending: false });
+        
+        if (postError) {
+          console.error('Erro ao buscar posts publicados:', postError);
+          // Fallback: buscar todos os posts
+          const { data: allPosts, error: allPostsError } = await supabase
+            .from('posts')
+            .select('*, author:authors(*), category:categories(*)')
+            .order('created_at', { ascending: false });
+          
+          if (allPostsError) {
+            console.error('Erro ao buscar todos os posts:', allPostsError);
+            setPosts([]);
+          } else {
+            setPosts(allPosts || []);
+          }
+        } else {
+          setPosts(postData || []);
+        }
+      } catch (error) {
+        console.error('Erro inesperado ao buscar posts:', error);
+        setPosts([]);
+      }
+    } catch (error) {
+      console.error('Erro geral ao carregar dados:', error);
+      setCategories([]);
+      setPosts([]);
+    } finally {
+      setLoading(false);
+    }
   }
 
   const getPostBySlug = (slug: string) => {
