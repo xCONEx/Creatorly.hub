@@ -15,6 +15,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/lib/supabaseClient';
 import RichTextEditor from '@/components/RichTextEditor';
 import ChatGPTImporter from '@/components/ChatGPTImporter';
+import ContentPreview from '@/components/ContentPreview';
 
 interface PostData {
   title: string;
@@ -58,6 +59,7 @@ const PostEditor = () => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [oldImageUrl, setOldImageUrl] = useState<string | null>(null);
   const [showChatGPTImporter, setShowChatGPTImporter] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
 
   useEffect(() => {
     fetchCategories();
@@ -394,15 +396,26 @@ const PostEditor = () => {
                   <div>
                     <div className="flex items-center justify-between mb-2">
                       <Label htmlFor="content">Conteúdo *</Label>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setShowChatGPTImporter(true)}
-                        className="text-xs"
-                      >
-                        Importar do ChatGPT
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setShowPreview(true)}
+                          className="text-xs"
+                        >
+                          Visualizar
+                        </Button>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setShowChatGPTImporter(true)}
+                          className="text-xs"
+                        >
+                          Importar do ChatGPT
+                        </Button>
+                      </div>
                     </div>
                     <RichTextEditor
                       value={postData.content}
@@ -523,6 +536,14 @@ const PostEditor = () => {
             setPostData(prev => ({ ...prev, content }));
             setShowChatGPTImporter(false);
           }}
+        />
+        
+        {/* Content Preview */}
+        <ContentPreview
+          content={postData.content}
+          isOpen={showPreview}
+          onClose={() => setShowPreview(false)}
+          title="Visualizar Conteúdo do Post"
         />
       </div>
     </RequireAdmin>
