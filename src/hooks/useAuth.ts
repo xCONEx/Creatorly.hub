@@ -87,12 +87,16 @@ export const useAuthProvider = () => {
   };
 
   const isAdmin = user?.role === 'admin';
+  const isModerator = user?.role === 'moderator';
+  const isEditor = user?.role === 'editor';
 
   return {
     user,
     loading,
     login,
     logout,
-    isAdmin
+    isAdmin,
+    isModerator,
+    isEditor
   };
 };
