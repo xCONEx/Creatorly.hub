@@ -103,13 +103,6 @@ const AdminLogin = () => {
             </Button>
           </form>
           
-          <div className="mt-6 p-4 bg-background/50 rounded-lg border border-border">
-            <p className="text-xs text-muted-foreground">
-              <strong>Credenciais de teste:</strong><br />
-              Email: admin@creatorly.com.br<br />
-              Senha: creatorly2024
-            </p>
-          </div>
         </CardContent>
       </Card>
     </div>
