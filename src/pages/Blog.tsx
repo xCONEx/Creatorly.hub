@@ -4,7 +4,14 @@ import { useBlogData } from '@/hooks/useBlogData';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Calendar, Clock, Eye, Heart } from 'lucide-react';
+import { Calendar, Clock, Eye, Heart, DollarSign, PiggyBank, TrendingUp, FileText } from 'lucide-react';
+
+const iconMap: Record<string, any> = {
+  DollarSign,
+  PiggyBank,
+  TrendingUp,
+  FileText,
+};
 
 const Blog: React.FC = () => {
   const { 
@@ -110,23 +117,26 @@ const Blog: React.FC = () => {
               Categorias em Destaque
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-              {featuredCategories.map((category) => (
-                <Card key={category.id} className="text-center hover:shadow-lg transition-shadow">
-                  <CardContent className="p-4">
-                    <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
-                      <span className="text-2xl">{category.icon || '📝'}</span>
-                    </div>
-                    <h3 className="font-semibold text-gray-900 dark:text-white">
-                      {category.name}
-                    </h3>
-                    {category.post_count && (
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        {category.post_count} posts
-                      </p>
-                    )}
-                  </CardContent>
-                </Card>
-              ))}
+              {featuredCategories.map((category) => {
+                const LucideIcon = iconMap[category.icon] || FileText;
+                return (
+                  <Card key={category.id} className="text-center hover:shadow-lg transition-shadow">
+                    <CardContent className="p-4">
+                      <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
+                        <LucideIcon className="w-7 h-7 text-primary" />
+                      </div>
+                      <h3 className="font-semibold text-gray-900 dark:text-white">
+                        {category.name}
+                      </h3>
+                      {category.post_count && (
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                          {category.post_count} posts
+                        </p>
+                      )}
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
           </div>
         )}
