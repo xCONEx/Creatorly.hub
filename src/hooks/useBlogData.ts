@@ -36,6 +36,7 @@ export interface Category {
 export const useBlogData = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [authors, setAuthors] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -52,11 +53,25 @@ export const useBlogData = () => {
       }
       setCategories(catData || []);
       
-      // Buscar posts (com join de autor e categoria)
+      // Buscar autores (se necessário)
       try {
+        const { data: authData, error: authError } = await supabase.from('authors').select('id, name, email');
+        if (authError) {
+          console.error('Erro ao buscar autores:', authError);
+        } else {
+          setAuthors(authData || []);
+        }
+      } catch (error) {
+        console.error('Erro ao buscar autores:', error);
+        setAuthors([]);
+      }
+      
+      // Buscar posts (consulta simplificada sem join inicial)
+      try {
+        // Primeiro, buscar posts sem join para evitar recursão
         const { data: postData, error: postError } = await supabase
           .from('posts')
-          .select('*, author:authors(*), category:categories(*)')
+          .select('id, title, slug, excerpt, content, featured_image, author_id, category_id, status, featured, read_time, views, likes, published_at, created_at, updated_at')
           .eq('status', 'published')
           .order('published_at', { ascending: false });
         
@@ -65,7 +80,7 @@ export const useBlogData = () => {
           // Fallback: buscar todos os posts
           const { data: allPosts, error: allPostsError } = await supabase
             .from('posts')
-            .select('*, author:authors(*), category:categories(*)')
+            .select('id, title, slug, excerpt, content, featured_image, author_id, category_id, status, featured, read_time, views, likes, published_at, created_at, updated_at')
             .order('created_at', { ascending: false });
           
           if (allPostsError) {
@@ -90,12 +105,29 @@ export const useBlogData = () => {
     }
   }
 
+  // Função para enriquecer posts com dados de autor e categoria
+  const enrichPosts = (postsData: BlogPost[]) => {
+    return postsData.map(post => ({
+      ...post,
+      author: authors.find(auth => auth.id === post.author_id),
+      category: categories.find(cat => cat.id === post.category_id)
+    }));
+  };
+
   const getPostBySlug = (slug: string) => {
-    return posts.find(post => post.slug === slug && post.status === 'published');
+    const post = posts.find(post => post.slug === slug && post.status === 'published');
+    if (post) {
+      return enrichPosts([post])[0];
+    }
+    return undefined;
   };
 
   const getPostsByCategory = (categorySlug: string) => {
-    return posts.filter(post => post.category?.slug === categorySlug && post.status === 'published');
+    const filteredPosts = posts.filter(post => {
+      const category = categories.find(cat => cat.id === post.category_id);
+      return category?.slug === categorySlug && post.status === 'published';
+    });
+    return enrichPosts(filteredPosts);
   };
 
   const getFeaturedCategories = () => {
@@ -106,18 +138,23 @@ export const useBlogData = () => {
   };
 
   const getFeaturedPost = () => {
-    return posts.find(post => post.featured && post.status === 'published');
+    const post = posts.find(post => post.featured && post.status === 'published');
+    if (post) {
+      return enrichPosts([post])[0];
+    }
+    return undefined;
   };
 
   const getPublishedPosts = () => {
-    return posts.filter(post => post.status === 'published');
+    return enrichPosts(posts.filter(post => post.status === 'published'));
   };
 
   const getRecentPosts = (limit = 5) => {
-    return posts
+    const filteredPosts = posts
       .filter(post => post.status === 'published')
       .sort((a, b) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime())
       .slice(0, limit);
+    return enrichPosts(filteredPosts);
   };
 
   return {
