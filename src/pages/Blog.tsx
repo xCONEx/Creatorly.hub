@@ -82,7 +82,7 @@ const Blog = () => {
                 </div>
                 <div className="lg:w-1/2 p-8">
                   <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">
-                    {featuredPost.category.name}
+                    {featuredPost.category?.name}
                   </Badge>
                   <h3 className="text-2xl lg:text-3xl font-bold text-foreground mb-4">
                     {featuredPost.title}
@@ -91,7 +91,7 @@ const Blog = () => {
                     {featuredPost.excerpt}
                   </p>
                   <div className="flex items-center gap-4 mb-6 text-sm text-muted-foreground">
-                    <span>{featuredPost.author.name}</span>
+                    <span>{featuredPost.author?.name}</span>
                     <span>•</span>
                     <span>{new Date(featuredPost.published_at || featuredPost.created_at).toLocaleDateString('pt-BR')}</span>
                     <span>•</span>
@@ -151,7 +151,7 @@ const Blog = () => {
                     className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                   <Badge className="absolute top-4 left-4 bg-background/90 text-foreground border-0">
-                    {post.category.name}
+                    {post.category?.name}
                   </Badge>
                 </div>
                 <CardHeader className="p-6">
@@ -162,7 +162,7 @@ const Blog = () => {
                     {post.excerpt}
                   </p>
                   <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
-                    <span>{post.author.name}</span>
+                    <span>{post.author?.name}</span>
                     <span>•</span>
                     <span>{new Date(post.published_at || post.created_at).toLocaleDateString('pt-BR')}</span>
                     <span>•</span>
