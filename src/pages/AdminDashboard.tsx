@@ -18,6 +18,9 @@ import {
   Target
 } from 'lucide-react';
 import RequireAdmin from '@/components/RequireAdmin';
+import { supabase } from '@/lib/supabaseClient';
+import { Input } from '@/components/ui/input';
+import { toast } from '@/hooks/use-toast';
 
 interface DashboardStats {
   totalPosts: number;
@@ -38,6 +41,9 @@ interface DashboardStats {
 }
 
 const AdminDashboard = () => {
+  const [inviteCodes, setInviteCodes] = useState<any[]>([]);
+  const [inviteRole, setInviteRole] = useState<'admin'|'editor'|'moderator'>('admin');
+  const [generating, setGenerating] = useState(false);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [stats, setStats] = useState<DashboardStats>({
@@ -84,6 +90,39 @@ const AdminDashboard = () => {
       navigate('/admin/login');
     }
   }, [user, navigate]);
+
+  // Carregar códigos de convite se for admin master
+  useEffect(() => {
+    if (user?.email === 'creatorlyhub@gmail.com') {
+      supabase
+        .from('invitation_codes')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .then(({ data }) => setInviteCodes(data || []));
+    }
+  }, [user]);
+
+  const handleGenerateCode = async () => {
+    setGenerating(true);
+    const code = Math.random().toString(36).substring(2, 10).toUpperCase();
+    const { error } = await supabase.from('invitation_codes').insert({
+      code,
+      role: inviteRole,
+      created_by: user?.id
+    });
+    if (error) {
+      toast({ title: 'Erro', description: 'Erro ao gerar código', variant: 'destructive' });
+    } else {
+      toast({ title: 'Código gerado', description: `Código: ${code}` });
+      // Atualizar lista
+      const { data } = await supabase
+        .from('invitation_codes')
+        .select('*')
+        .order('created_at', { ascending: false });
+      setInviteCodes(data || []);
+    }
+    setGenerating(false);
+  };
 
   const handleLogout = () => {
     logout();
@@ -203,6 +242,49 @@ const AdminDashboard = () => {
               </CardContent>
             </Card>
           </div>
+
+          {/* Interface de geração de códigos de convite para admin master */}
+          {user?.email === 'creatorlyhub@gmail.com' && (
+            <div className="mb-8 p-4 border rounded-lg bg-background/80">
+              <h2 className="font-bold mb-2">Gerar Código de Convite</h2>
+              <div className="flex items-center gap-2 mb-2">
+                <label className="text-sm">Tipo:</label>
+                <select value={inviteRole} onChange={e => setInviteRole(e.target.value as any)} className="border rounded px-2 py-1">
+                  <option value="admin">Admin</option>
+                  <option value="editor">Editor</option>
+                  <option value="moderator">Moderador</option>
+                </select>
+                <Button onClick={handleGenerateCode} disabled={generating} className="bg-gradient-primary">
+                  {generating ? 'Gerando...' : 'Gerar Código'}
+                </Button>
+              </div>
+              <div className="text-xs text-muted-foreground mb-2">Compartilhe o código apenas com pessoas autorizadas.</div>
+              <div className="overflow-x-auto">
+                <table className="min-w-full text-xs border">
+                  <thead>
+                    <tr className="bg-muted">
+                      <th className="px-2 py-1 border">Código</th>
+                      <th className="px-2 py-1 border">Tipo</th>
+                      <th className="px-2 py-1 border">Usado?</th>
+                      <th className="px-2 py-1 border">Criado em</th>
+                      <th className="px-2 py-1 border">Usado por</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {inviteCodes.map(code => (
+                      <tr key={code.code}>
+                        <td className="px-2 py-1 border font-mono">{code.code}</td>
+                        <td className="px-2 py-1 border">{code.role}</td>
+                        <td className="px-2 py-1 border">{code.used ? 'Sim' : 'Não'}</td>
+                        <td className="px-2 py-1 border">{new Date(code.created_at).toLocaleString('pt-BR')}</td>
+                        <td className="px-2 py-1 border">{code.used_by || '-'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Recent Posts */}
