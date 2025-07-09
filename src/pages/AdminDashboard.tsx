@@ -104,24 +104,52 @@ const AdminDashboard = () => {
 
   const handleGenerateCode = async () => {
     setGenerating(true);
-    const code = Math.random().toString(36).substring(2, 10).toUpperCase();
-    const { error } = await supabase.from('invitation_codes').insert({
-      code,
-      role: inviteRole,
-      created_by: user?.id
-    });
-    if (error) {
-      toast({ title: 'Erro', description: 'Erro ao gerar código', variant: 'destructive' });
-    } else {
-      toast({ title: 'Código gerado', description: `Código: ${code}` });
-      // Atualizar lista
-      const { data } = await supabase
-        .from('invitation_codes')
-        .select('*')
-        .order('created_at', { ascending: false });
-      setInviteCodes(data || []);
+    try {
+      const code = Math.random().toString(36).substring(2, 10).toUpperCase();
+      const { error } = await supabase.from('invitation_codes').insert({
+        code,
+        role: inviteRole,
+        created_by: user?.id
+      });
+      
+      if (error) {
+        console.error('Erro ao gerar código:', error);
+        if (error.code === '23505') { // Unique constraint violation
+          toast({ 
+            title: 'Erro', 
+            description: 'Código já existe. Tente novamente.', 
+            variant: 'destructive' 
+          });
+        } else {
+          toast({ 
+            title: 'Erro', 
+            description: `Erro ao gerar código: ${error.message}`, 
+            variant: 'destructive' 
+          });
+        }
+      } else {
+        toast({ 
+          title: 'Código gerado com sucesso!', 
+          description: `Código: ${code}` 
+        });
+        
+        // Atualizar lista
+        const { data } = await supabase
+          .from('invitation_codes')
+          .select('*')
+          .order('created_at', { ascending: false });
+        setInviteCodes(data || []);
+      }
+    } catch (error) {
+      console.error('Erro inesperado:', error);
+      toast({ 
+        title: 'Erro inesperado', 
+        description: 'Tente novamente mais tarde.', 
+        variant: 'destructive' 
+      });
+    } finally {
+      setGenerating(false);
     }
-    setGenerating(false);
   };
 
   const handleLogout = () => {
