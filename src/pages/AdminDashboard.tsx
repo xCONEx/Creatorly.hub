@@ -70,9 +70,10 @@ const AdminDashboard = () => {
       setStats(null);
       let errorMsg = '';
       try {
-        // Buscar posts publicados
+        // Buscar posts publicados (consulta simplificada)
         let posts: any[] = [];
         try {
+          // Primeiro, tenta buscar posts publicados sem join
           const { data: publishedPosts, error: postsError } = await supabase
             .from('posts')
             .select('id, title, views, likes, status, created_at, published_at')
@@ -88,10 +89,11 @@ const AdminDashboard = () => {
               .order('created_at', { ascending: false });
             
             if (allPostsError) {
-              errorMsg = 'Erro ao buscar posts: ' + allPostsError.message;
-              throw allPostsError;
+              console.error('Erro ao buscar todos os posts:', allPostsError);
+              posts = []; // Fallback para array vazio
+            } else {
+              posts = allPosts || [];
             }
-            posts = allPosts || [];
           } else {
             posts = publishedPosts || [];
           }
