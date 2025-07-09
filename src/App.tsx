@@ -11,6 +11,7 @@ import BlogPost from "./pages/BlogPost";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminPosts from "./pages/AdminPosts";
+import AdminCategories from "./pages/AdminCategories";
 import PostEditor from "./pages/PostEditor";
 import NotFound from "./pages/NotFound";
 
@@ -30,6 +31,7 @@ const App = () => (
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/posts" element={<AdminPosts />} />
+            <Route path="/admin/categories" element={<AdminCategories />} />
             <Route path="/admin/posts/new" element={<PostEditor />} />
             <Route path="/admin/posts/edit/:id" element={<PostEditor />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
