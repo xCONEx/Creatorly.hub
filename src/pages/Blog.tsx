@@ -1,210 +1,212 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { useBlogData } from '@/hooks/useBlogData';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Calendar, Clock, Eye, Heart, DollarSign, PiggyBank, TrendingUp, FileText } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Clock, ArrowRight, Download, Star } from "lucide-react";
+import { Link } from "react-router-dom";
+import Header from "@/components/Header";
+import { useBlogData } from "@/hooks/useBlogData";
 
-const iconMap: Record<string, any> = {
-  DollarSign,
-  PiggyBank,
-  TrendingUp,
-  FileText,
-};
-
-const Blog: React.FC = () => {
-  const { 
-    posts, 
-    categories, 
-    loading, 
-    getFeaturedPost, 
-    getFeaturedCategories, 
-    getRecentPosts 
-  } = useBlogData();
+const Blog = () => {
+  const { categories, getFeaturedPost, getPublishedPosts, loading } = useBlogData();
+  
+  const featuredPost = getFeaturedPost();
+  const recentPosts = getPublishedPosts().filter(post => !post.featured);
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
-        <div className="container mx-auto px-4 py-8">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600 dark:text-gray-400">Carregando blog...</p>
-          </div>
+      <div className="min-h-screen bg-gradient-hero flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 bg-gradient-primary rounded-lg animate-pulse mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Carregando posts...</p>
         </div>
       </div>
     );
   }
 
-  const featuredPost = getFeaturedPost();
-  const featuredCategories = getFeaturedCategories();
-  const recentPosts = getRecentPosts(6);
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
-      <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            Blog Creatorly Hub
+    <div className="min-h-screen bg-gradient-hero">
+      <Header />
+      
+      {/* Hero Section */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto text-center">
+          <Badge className="mb-6 bg-primary/10 text-primary border-primary/20">
+            📚 Novo: Conteúdo semanal
+          </Badge>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6">
+            Conteúdo feito para quem{" "}
+            <span className="bg-gradient-primary bg-clip-text text-transparent">
+              vive do audiovisual
+            </span>
           </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            Descubra insights valiosos sobre tecnologia, inovação e desenvolvimento
+          <p className="text-lg sm:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
+            Aprenda técnicas, estratégias e dicas práticas para fazer seu negócio audiovisual crescer de forma sustentável e lucrativa.
           </p>
+          
+          {/* CTA Fixo */}
+          <Card className="max-w-md mx-auto bg-gradient-card shadow-card border-primary/10">
+            <CardContent className="p-6">
+              <div className="flex items-center gap-3 mb-3">
+                <Download className="h-5 w-5 text-primary" />
+                <span className="font-semibold text-foreground">Material Gratuito</span>
+              </div>
+              <h3 className="font-bold text-lg mb-2">Planilha de Precificação</h3>
+              <p className="text-sm text-muted-foreground mb-4">
+                Calcule o valor justo dos seus serviços audiovisuais
+              </p>
+              <Button className="w-full bg-gradient-primary hover:shadow-glow transition-all duration-300">
+                Baixar Grátis
+              </Button>
+            </CardContent>
+          </Card>
         </div>
+      </section>
 
-        {/* Featured Post */}
-        {featuredPost && (
-          <div className="mb-12">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-              Post em Destaque
-            </h2>
-            <Card className="overflow-hidden">
-              <div className="md:flex">
-                {featuredPost.featured_image && (
-                  <div className="md:w-1/2">
-                    <img
-                      src={featuredPost.featured_image}
-                      alt={featuredPost.title}
-                      className="w-full h-64 md:h-full object-cover"
-                    />
-                  </div>
-                )}
-                <div className="md:w-1/2 p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Badge variant="secondary">
-                      {featuredPost.category?.name}
-                    </Badge>
-                    <span className="text-sm text-gray-500 dark:text-gray-400">
-                      {new Date(featuredPost.published_at).toLocaleDateString('pt-BR')}
-                    </span>
-                  </div>
-                  <CardTitle className="text-2xl mb-4">
+      {/* Featured Post */}
+      {featuredPost && (
+        <section className="py-12 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex items-center gap-2 mb-8">
+              <Star className="h-5 w-5 text-primary" />
+              <h2 className="text-2xl font-bold text-foreground">Artigo em Destaque</h2>
+            </div>
+            
+            <Card className="overflow-hidden bg-gradient-card shadow-elegant border-primary/10 hover:shadow-glow transition-all duration-300">
+              <div className="lg:flex">
+                <div className="lg:w-1/2">
+                  <img
+                    src={featuredPost.featured_image}
+                    alt={featuredPost.title}
+                    className="w-full h-64 lg:h-full object-cover"
+                  />
+                </div>
+                <div className="lg:w-1/2 p-8">
+                  <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">
+                    {featuredPost.category.name}
+                  </Badge>
+                  <h3 className="text-2xl lg:text-3xl font-bold text-foreground mb-4">
                     {featuredPost.title}
-                  </CardTitle>
-                  <p className="text-gray-600 dark:text-gray-400 mb-6">
+                  </h3>
+                  <p className="text-muted-foreground mb-6 text-lg">
                     {featuredPost.excerpt}
                   </p>
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
-                      <Clock className="w-4 h-4" />
-                      {featuredPost.read_time} min
-                    </div>
-                    <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
-                      <Eye className="w-4 h-4" />
-                      {featuredPost.views}
-                    </div>
-                    <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
-                      <Heart className="w-4 h-4" />
-                      {featuredPost.likes}
+                  <div className="flex items-center gap-4 mb-6 text-sm text-muted-foreground">
+                    <span>{featuredPost.author.name}</span>
+                    <span>•</span>
+                    <span>{new Date(featuredPost.published_at || featuredPost.created_at).toLocaleDateString('pt-BR')}</span>
+                    <span>•</span>
+                    <div className="flex items-center gap-1">
+                      <Clock className="h-4 w-4" />
+                      <span>{featuredPost.read_time} min</span>
                     </div>
                   </div>
-                  <Button asChild>
-                    <Link to={`/blog/${featuredPost.slug}`}>
-                      Ler mais
-                    </Link>
-                  </Button>
+                  <Link to={`/blog/${featuredPost.slug}`}>
+                    <Button className="bg-gradient-primary hover:shadow-glow transition-all duration-300">
+                      Ler Artigo
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </Card>
           </div>
-        )}
+        </section>
+      )}
 
-        {/* Featured Categories */}
-        {featuredCategories.length > 0 && (
-          <div className="mb-12">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-              Categorias em Destaque
-            </h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-              {featuredCategories.map((category) => {
-                const LucideIcon = iconMap[category.icon] || FileText;
-                return (
-                  <Card key={category.id} className="text-center hover:shadow-lg transition-shadow">
-                    <CardContent className="p-4">
-                      <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
-                        <LucideIcon className="w-7 h-7 text-primary" />
-                      </div>
-                      <h3 className="font-semibold text-gray-900 dark:text-white">
-                        {category.name}
-                      </h3>
-                      {category.post_count && (
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          {category.post_count} posts
-                        </p>
-                      )}
-                    </CardContent>
-                  </Card>
-                );
-              })}
-            </div>
+      {/* Categories */}
+      <section className="py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-2xl font-bold text-foreground mb-8">Categorias em Destaque</h2>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {categories.map((category) => (
+              <Link key={category.id} to={`/blog/categoria/${category.slug}`}>
+                <Card className="cursor-pointer hover:shadow-card transition-all duration-300 bg-gradient-card border-primary/10">
+                  <CardContent className="p-6 text-center">
+                    <div className={`w-12 h-12 ${category.color} rounded-full mx-auto mb-3 flex items-center justify-center`}>
+                      <span className="text-white font-bold text-lg">
+                        {category.name.charAt(0)}
+                      </span>
+                    </div>
+                    <h3 className="font-semibold text-foreground mb-1">{category.name}</h3>
+                    <p className="text-sm text-muted-foreground">{category.post_count} artigos</p>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
           </div>
-        )}
+        </div>
+      </section>
 
-        {/* Recent Posts */}
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-            Artigos Recentes
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Recent Articles */}
+      <section className="py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-2xl font-bold text-foreground mb-8">Artigos Recentes</h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {recentPosts.map((post) => (
-              <Card key={post.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                {post.featured_image && (
+              <Card key={post.id} className="overflow-hidden bg-gradient-card shadow-card border-primary/10 hover:shadow-elegant transition-all duration-300 group">
+                <div className="relative overflow-hidden">
                   <img
                     src={post.featured_image}
                     alt={post.title}
-                    className="w-full h-48 object-cover"
+                    className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                   />
-                )}
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-2 mb-3">
-                    <Badge variant="outline">
-                      {post.category?.name}
-                    </Badge>
-                    <span className="text-sm text-gray-500 dark:text-gray-400">
-                      {new Date(post.published_at).toLocaleDateString('pt-BR')}
-                    </span>
-                  </div>
-                  <CardTitle className="text-xl mb-3 line-clamp-2">
+                  <Badge className="absolute top-4 left-4 bg-background/90 text-foreground border-0">
+                    {post.category.name}
+                  </Badge>
+                </div>
+                <CardHeader className="p-6">
+                  <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
                     {post.title}
-                  </CardTitle>
-                  <p className="text-gray-600 dark:text-gray-400 mb-4 line-clamp-3">
+                  </h3>
+                  <p className="text-muted-foreground mb-4">
                     {post.excerpt}
                   </p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-                      <div className="flex items-center gap-1">
-                        <Clock className="w-4 h-4" />
-                        {post.read_time} min
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Eye className="w-4 h-4" />
-                        {post.views}
-                      </div>
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
+                    <span>{post.author.name}</span>
+                    <span>•</span>
+                    <span>{new Date(post.published_at || post.created_at).toLocaleDateString('pt-BR')}</span>
+                    <span>•</span>
+                    <div className="flex items-center gap-1">
+                      <Clock className="h-4 w-4" />
+                      <span>{post.read_time} min</span>
                     </div>
-                    <Button variant="outline" size="sm" asChild>
-                      <Link to={`/blog/${post.slug}`}>
-                        Ler mais
-                      </Link>
-                    </Button>
                   </div>
-                </CardContent>
+                  <Link to={`/blog/${post.slug}`}>
+                    <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
+                      Ler Mais
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </Link>
+                </CardHeader>
               </Card>
             ))}
           </div>
         </div>
+      </section>
 
-        {/* All Posts Link */}
-        {posts.length > 6 && (
-          <div className="text-center mt-12">
-            <Button variant="outline" size="lg" asChild>
-              <Link to="/blog/all">
-                Ver todos os posts
-              </Link>
-            </Button>
-          </div>
-        )}
-      </div>
+      {/* Newsletter CTA */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto text-center">
+          <Card className="bg-gradient-primary p-8 border-0 shadow-glow">
+            <h2 className="text-3xl font-bold text-white mb-4">
+              Receba conteúdo exclusivo
+            </h2>
+            <p className="text-white/90 mb-6 text-lg">
+              Cadastre-se e receba semanalmente dicas, estratégias e materiais gratuitos para fazer seu negócio audiovisual crescer.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+              <input
+                type="email"
+                placeholder="Seu melhor email"
+                className="flex-1 px-4 py-3 rounded-lg border-0 bg-white/90 placeholder:text-muted-foreground"
+              />
+              <Button variant="secondary" className="bg-white text-primary hover:bg-white/90">
+                Quero Receber
+              </Button>
+            </div>
+          </Card>
+        </div>
+      </section>
     </div>
   );
 };
