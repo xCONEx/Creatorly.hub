@@ -46,44 +46,8 @@ const AdminDashboard = () => {
   const [generating, setGenerating] = useState(false);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const [stats, setStats] = useState<DashboardStats>({
-    totalPosts: 12,
-    totalViews: 15420,
-    totalLikes: 892,
-    subscribers: 1247,
-    recentPosts: [
-      {
-        id: '1',
-        title: 'Como precificar seus serviços audiovisuais em 2024',
-        views: 2451,
-        status: 'published',
-        created_at: '2024-01-15'
-      },
-      {
-        id: '2',
-        title: 'Organizando as finanças como produtor audiovisual',
-        views: 1876,
-        status: 'published',
-        created_at: '2024-01-10'
-      },
-      {
-        id: '3',
-        title: 'Principais trends de vídeo marketing para 2024',
-        views: 3104,
-        status: 'published',
-        created_at: '2024-01-05'
-      }
-    ],
-    weeklyViews: [
-      { date: '2024-01-15', views: 420 },
-      { date: '2024-01-14', views: 350 },
-      { date: '2024-01-13', views: 280 },
-      { date: '2024-01-12', views: 390 },
-      { date: '2024-01-11', views: 460 },
-      { date: '2024-01-10', views: 520 },
-      { date: '2024-01-09', views: 380 }
-    ]
-  });
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!user) {
@@ -101,6 +65,62 @@ const AdminDashboard = () => {
         .then(({ data }) => setInviteCodes(data || []));
     }
   }, [user]);
+
+  // Buscar dados reais do dashboard
+  useEffect(() => {
+    async function fetchStats() {
+      setLoading(true);
+      // Buscar posts publicados
+      const { data: posts, error: postsError } = await supabase
+        .from('posts')
+        .select('id, title, views, likes, status, created_at, published_at')
+        .eq('status', 'published')
+        .order('published_at', { ascending: false });
+      if (postsError) {
+        toast({ title: 'Erro', description: 'Erro ao buscar posts', variant: 'destructive' });
+        setLoading(false);
+        return;
+      }
+      // Total de posts publicados
+      const totalPosts = posts.length;
+      // Total de visualizações
+      const totalViews = posts.reduce((acc, p) => acc + (p.views || 0), 0);
+      // Total de curtidas
+      const totalLikes = posts.reduce((acc, p) => acc + (p.likes || 0), 0);
+      // Posts recentes (3 mais recentes)
+      const recentPosts = posts.slice(0, 3).map((p: any) => ({
+        id: p.id,
+        title: p.title,
+        views: p.views,
+        status: p.status,
+        created_at: p.published_at || p.created_at
+      }));
+      // Visualizações da semana: últimos 7 posts publicados
+      const weeklyViews = posts.slice(0, 7).map((p: any) => ({
+        date: p.published_at || p.created_at,
+        views: p.views
+      }));
+      // Buscar inscritos
+      const { count: subscribers, error: subError } = await supabase
+        .from('newsletter_subscribers')
+        .select('id', { count: 'exact', head: true });
+      if (subError) {
+        toast({ title: 'Erro', description: 'Erro ao buscar inscritos', variant: 'destructive' });
+        setLoading(false);
+        return;
+      }
+      setStats({
+        totalPosts,
+        totalViews,
+        totalLikes,
+        subscribers: subscribers || 0,
+        recentPosts,
+        weeklyViews
+      });
+      setLoading(false);
+    }
+    fetchStats();
+  }, []);
 
   const handleGenerateCode = async () => {
     setGenerating(true);
@@ -230,7 +250,7 @@ const AdminDashboard = () => {
                 <FileText className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-foreground">{stats.totalPosts}</div>
+                <div className="text-2xl font-bold text-foreground">{stats?.totalPosts || 'Carregando...'}</div>
                 <p className="text-xs text-muted-foreground">
                   +2 desde o mês passado
                 </p>
@@ -243,7 +263,7 @@ const AdminDashboard = () => {
                 <Eye className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-foreground">{stats.totalViews.toLocaleString()}</div>
+                <div className="text-2xl font-bold text-foreground">{stats?.totalViews.toLocaleString() || 'Carregando...'}</div>
                 <p className="text-xs text-muted-foreground">
                   +12% desde a semana passada
                 </p>
@@ -256,7 +276,7 @@ const AdminDashboard = () => {
                 <ThumbsUp className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-foreground">{stats.totalLikes}</div>
+                <div className="text-2xl font-bold text-foreground">{stats?.totalLikes || 'Carregando...'}</div>
                 <p className="text-xs text-muted-foreground">
                   +8% desde a semana passada
                 </p>
@@ -269,7 +289,7 @@ const AdminDashboard = () => {
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-foreground">{stats.subscribers}</div>
+                <div className="text-2xl font-bold text-foreground">{stats?.subscribers || 'Carregando...'}</div>
                 <p className="text-xs text-muted-foreground">
                   +5% desde a semana passada
                 </p>
@@ -331,7 +351,7 @@ const AdminDashboard = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {stats.recentPosts.map((post) => (
+                  {stats?.recentPosts.map((post) => (
                     <div key={post.id} className="flex items-center justify-between p-4 bg-background/50 rounded-lg">
                       <div className="flex-1">
                         <h4 className="font-medium text-foreground line-clamp-1">
@@ -368,7 +388,7 @@ const AdminDashboard = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {stats.weeklyViews.map((day) => (
+                  {stats?.weeklyViews.map((day) => (
                     <div key={day.date} className="flex items-center justify-between">
                       <span className="text-sm text-muted-foreground">
                         {new Date(day.date).toLocaleDateString('pt-BR', { 
