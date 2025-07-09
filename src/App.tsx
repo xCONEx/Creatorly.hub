@@ -15,6 +15,10 @@ import AdminPosts from "./pages/AdminPosts";
 import AdminCategories from "./pages/AdminCategories";
 import PostEditor from "./pages/PostEditor";
 import NotFound from "./pages/NotFound";
+import FinanceFlowSales from "./pages/FinanceFlowSales";
+import OrcaFacilSales from "./pages/OrcaFacilSales";
+import ContratProSales from "./pages/ContratProSales";
+
 
 const queryClient = new QueryClient();
 
@@ -29,6 +33,9 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="/financeflow" element={<FinanceFlowSales />} />
+            <Route path="/orcafacil" element={<OrcaFacilSales />} />
+            <Route path="/contratpro" element={<ContratProSales />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route 
               path="/admin" 
