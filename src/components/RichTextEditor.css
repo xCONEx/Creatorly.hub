@@ -122,6 +122,16 @@
   text-decoration: underline;
 }
 
+.rich-text-editor .editor,
+.rich-text-editor .editor h1,
+.rich-text-editor .editor h2,
+.rich-text-editor .editor h3,
+.rich-text-editor .editor p,
+.rich-text-editor .editor ul,
+.rich-text-editor .editor ol {
+  color: #111 !important;
+}
+
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
   .rich-text-editor {
