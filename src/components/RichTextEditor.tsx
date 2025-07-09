@@ -58,8 +58,26 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
 
   const handlePaste = (e: React.ClipboardEvent) => {
     e.preventDefault();
+    const html = e.clipboardData.getData('text/html');
     const text = e.clipboardData.getData('text/plain');
-    document.execCommand('insertText', false, text);
+    let content = html || text;
+    // Sanitização básica: permite apenas tags seguras
+    const allowedTags = [
+      'p', 'br', 'b', 'strong', 'i', 'em', 'u', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'blockquote', 'pre', 'code', 'a', 'img'
+    ];
+    const div = document.createElement('div');
+    div.innerHTML = content;
+    const clean = (el: Element) => {
+      Array.from(el.children).forEach(child => {
+        if (!allowedTags.includes(child.tagName.toLowerCase())) {
+          child.replaceWith(...Array.from(child.childNodes));
+        } else {
+          clean(child);
+        }
+      });
+    };
+    clean(div);
+    document.execCommand('insertHTML', false, div.innerHTML);
     updateContent();
   };
 
