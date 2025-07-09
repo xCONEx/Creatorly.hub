@@ -55,7 +55,10 @@ export const useAuthProvider = () => {
       const { data: { session }, error: sessionError } = await supabase.auth.getSession();
       
       if (sessionError) {
-        console.error('Erro ao obter sessão:', sessionError);
+        // Só logar erro se não for ausência de sessão
+        if (sessionError.name !== 'AuthSessionMissingError') {
+          console.error('Erro ao obter sessão:', sessionError);
+        }
         setUser(null);
         setLoading(false);
         return;
@@ -66,22 +69,14 @@ export const useAuthProvider = () => {
         setUser(userData);
         console.log('Sessão restaurada para:', userData.email);
       } else {
-        // Se não há sessão, tentar obter usuário diretamente
-        const { data: { user }, error: userError } = await supabase.auth.getUser();
-        
-        if (userError) {
-          console.error('Erro ao obter usuário:', userError);
-          setUser(null);
-        } else if (user) {
-          const userData = mapUserData(user);
-          setUser(userData);
-          console.log('Usuário restaurado:', userData.email);
-        } else {
-          setUser(null);
-        }
+        // Não tentar buscar usuário se não há sessão
+        setUser(null);
       }
     } catch (error) {
-      console.error('Erro ao verificar sessão:', error);
+      // Só logar erro se não for ausência de sessão
+      if (!(error && error.name === 'AuthSessionMissingError')) {
+        console.error('Erro ao verificar sessão:', error);
+      }
       setUser(null);
     } finally {
       setLoading(false);
