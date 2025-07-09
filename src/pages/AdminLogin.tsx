@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,13 +14,24 @@ const AdminLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [showRegister, setShowRegister] = useState(false);
   const [registerLoading, setRegisterLoading] = useState(false);
   const [registerError, setRegisterError] = useState<string | null>(null);
   const [registerSuccess, setRegisterSuccess] = useState<string | null>(null);
   const [inviteCode, setInviteCode] = useState('');
+
+  // Verificar se o usuário já está logado
+  useEffect(() => {
+    if (!authLoading && user) {
+      toast({
+        title: "Já logado!",
+        description: "Você já está logado no sistema.",
+      });
+      navigate('/admin');
+    }
+  }, [user, authLoading, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,6 +63,23 @@ const AdminLogin = () => {
       setLoading(false);
     }
   };
+
+  // Mostrar loading enquanto verifica a sessão
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-hero flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-foreground">Verificando sessão...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Se já está logado, não mostrar o formulário
+  if (user) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-hero flex items-center justify-center px-4">
