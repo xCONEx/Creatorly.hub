@@ -20,6 +20,7 @@ const AdminLogin = () => {
   const [registerLoading, setRegisterLoading] = useState(false);
   const [registerError, setRegisterError] = useState<string | null>(null);
   const [registerSuccess, setRegisterSuccess] = useState<string | null>(null);
+  const [inviteCode, setInviteCode] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -131,21 +132,41 @@ const AdminLogin = () => {
                 const email = (document.getElementById('register-email') as HTMLInputElement).value;
                 const password = (document.getElementById('register-password') as HTMLInputElement).value;
                 const passwordConfirm = (document.getElementById('register-password-confirm') as HTMLInputElement).value;
+                const code = (document.getElementById('register-invite-code') as HTMLInputElement).value;
                 if (password !== passwordConfirm) {
                   setRegisterError('As senhas não coincidem.');
                   setRegisterLoading(false);
                   return;
                 }
-                const { error } = await supabase.auth.signUp({
+                // Validar código de convite
+                const { data: codeData, error: codeError } = await supabase
+                  .from('invitation_codes')
+                  .select('*')
+                  .eq('code', code)
+                  .eq('used', false)
+                  .single();
+                if (codeError || !codeData) {
+                  setRegisterError('Código de convite inválido ou já utilizado.');
+                  setRegisterLoading(false);
+                  return;
+                }
+                // Criar usuário no Supabase Auth
+                const { data, error } = await supabase.auth.signUp({
                   email,
                   password,
-                  options: { data: { name, role: 'admin' } }
+                  options: { data: { name, role: codeData.role } }
                 });
                 if (error) {
                   setRegisterError(error.message);
-                } else {
-                  setRegisterSuccess('Conta criada com sucesso! Verifique seu email para confirmar.');
+                  setRegisterLoading(false);
+                  return;
                 }
+                // Marcar código como usado
+                await supabase
+                  .from('invitation_codes')
+                  .update({ used: true, used_by: data.user?.id, used_at: new Date().toISOString() })
+                  .eq('code', code);
+                setRegisterSuccess('Conta criada com sucesso! Verifique seu email para confirmar.');
                 setRegisterLoading(false);
               }}>
                 <div>
@@ -163,6 +184,10 @@ const AdminLogin = () => {
                 <div>
                   <Label htmlFor="register-password-confirm">Confirmar Senha</Label>
                   <Input id="register-password-confirm" type="password" placeholder="Repita a senha" required minLength={6} />
+                </div>
+                <div>
+                  <Label htmlFor="register-invite-code">Código de convite</Label>
+                  <Input id="register-invite-code" type="text" placeholder="Informe o código fornecido pelo admin" required value={inviteCode} onChange={e => setInviteCode(e.target.value)} />
                 </div>
                 {registerError && <div className="text-destructive text-sm">{registerError}</div>}
                 {registerSuccess && <div className="text-green-600 text-sm">{registerSuccess}</div>}
