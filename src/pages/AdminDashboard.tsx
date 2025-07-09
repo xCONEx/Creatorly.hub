@@ -109,7 +109,7 @@ const AdminDashboard = () => {
       const { error } = await supabase.from('invitation_codes').insert({
         code,
         role: inviteRole,
-        created_by: user?.id
+        created_by: null // Removendo a referência ao user.id por enquanto
       });
       
       if (error) {
@@ -118,6 +118,12 @@ const AdminDashboard = () => {
           toast({ 
             title: 'Erro', 
             description: 'Código já existe. Tente novamente.', 
+            variant: 'destructive' 
+          });
+        } else if (error.code === '23503') { // Foreign key constraint violation
+          toast({ 
+            title: 'Erro', 
+            description: 'Usuário não encontrado na tabela de autores. Entre em contato com o administrador.', 
             variant: 'destructive' 
           });
         } else {
