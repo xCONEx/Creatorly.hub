@@ -1,4 +1,5 @@
 import { useState, useEffect, createContext, useContext } from 'react';
+import { supabase } from '@/lib/supabaseClient';
 
 interface Author {
   id: string;
@@ -34,40 +35,55 @@ export const useAuthProvider = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check for existing session
-    const savedUser = localStorage.getItem('creatorly_admin');
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
-    setLoading(false);
+    const getSession = async () => {
+      setLoading(true);
+      const { data, error } = await supabase.auth.getUser();
+      if (data?.user) {
+        setUser({
+          id: data.user.id,
+          email: data.user.email || '',
+          name: data.user.user_metadata?.name || '',
+          avatar_url: data.user.user_metadata?.avatar_url,
+          bio: data.user.user_metadata?.bio,
+          role: data.user.user_metadata?.role || 'admin',
+        });
+      } else {
+        setUser(null);
+      }
+      setLoading(false);
+    };
+    getSession();
+    // Listen for auth changes
+    const { data: listener } = supabase.auth.onAuthStateChange(() => {
+      getSession();
+    });
+    return () => {
+      listener?.subscription.unsubscribe();
+    };
   }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
     setLoading(true);
-    
-    // Mock login - replace with Supabase auth
-    if (email === 'admin@creatorly.com.br' && password === 'creatorly2024') {
-      const mockUser: Author = {
-        id: '1',
-        email: 'admin@creatorly.com.br',
-        name: 'Creatorly Team',
-        bio: 'Equipe oficial do Creatorly',
-        role: 'admin'
-      };
-      
-      setUser(mockUser);
-      localStorage.setItem('creatorly_admin', JSON.stringify(mockUser));
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error || !data.user) {
       setLoading(false);
-      return true;
+      return false;
     }
-    
+    setUser({
+      id: data.user.id,
+      email: data.user.email || '',
+      name: data.user.user_metadata?.name || '',
+      avatar_url: data.user.user_metadata?.avatar_url,
+      bio: data.user.user_metadata?.bio,
+      role: data.user.user_metadata?.role || 'admin',
+    });
     setLoading(false);
-    return false;
+    return true;
   };
 
-  const logout = () => {
+  const logout = async () => {
+    await supabase.auth.signOut();
     setUser(null);
-    localStorage.removeItem('creatorly_admin');
   };
 
   const isAdmin = user?.role === 'admin';
