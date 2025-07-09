@@ -110,9 +110,9 @@ const BlogPost: React.FC = () => {
           )}
 
           {/* Content */}
-          <div className="prose prose-lg max-w-none mb-12">
+          <div className="prose prose-lg max-w-none mb-12 prose-headings:font-bold prose-headings:text-black prose-p:text-black prose-li:text-black prose-strong:text-black prose-ul:pl-6 prose-ol:pl-6 prose-h1:mb-4 prose-h2:mb-3 prose-h3:mb-2 prose-p:mb-4 prose-ul:mb-4 prose-ol:mb-4 prose-li:mb-1">
             <div 
-              className="text-gray-700 dark:text-gray-300 leading-relaxed"
+              style={{ color: '#111' }}
               dangerouslySetInnerHTML={{ __html: post.content }}
             />
           </div>
