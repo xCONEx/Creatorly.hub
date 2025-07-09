@@ -135,10 +135,12 @@ const Index = () => {
                 </div>
               </div>
 
-              <Button size="lg" className="bg-gradient-primary hover:shadow-glow transition-all duration-300">
-                <TrendingUp className="mr-2 h-5 w-5" />
-                Acessar FinanceFlow
-              </Button>
+             <Link to="/financeflow">
+                <Button size="lg" className="bg-gradient-primary hover:shadow-glow transition-all duration-300">
+                  <TrendingUp className="mr-2 h-5 w-5" />
+                  Acessar FinanceFlow
+                </Button>
+              </Link>
             </div>
 
             {/* Right Side - Dashboard Preview */}
@@ -280,10 +282,12 @@ const Index = () => {
                 </div>
               </div>
 
-              <Button size="lg" className="bg-gradient-primary hover:shadow-glow transition-all duration-300">
-                <Zap className="mr-2 h-5 w-5" />
-                Acessar OrçaFácil
-              </Button>
+              <Link to="/orcafacil">
+                <Button size="lg" className="bg-gradient-primary hover:shadow-glow transition-all duration-300">
+                  <Zap className="mr-2 h-5 w-5" />
+                  Acessar OrçaFácil
+                </Button>
+              </Link>
             </div>
 
             {/* Right Side - OrçaFácil Preview */}
@@ -395,10 +399,12 @@ const Index = () => {
                 </div>
               </div>
 
-              <Button size="lg" className="bg-gradient-primary hover:shadow-glow transition-all duration-300">
-                <FileText className="mr-2 h-5 w-5" />
-                Acessar ContratPro
-              </Button>
+              <Link to="/contratpro">
+                <Button size="lg" className="bg-gradient-primary hover:shadow-glow transition-all duration-300">
+                  <FileText className="mr-2 h-5 w-5" />
+                  Acessar ContratPro
+                </Button>
+              </Link>
             </div>
 
             {/* Right Side - ContratPro Preview */}
