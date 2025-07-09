@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
+import RequireAdmin from "./components/RequireAdmin";
 import Index from "./pages/Index";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
@@ -29,11 +30,46 @@ const App = () => (
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/admin/login" element={<AdminLogin />} />
-            <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/admin/posts" element={<AdminPosts />} />
-            <Route path="/admin/categories" element={<AdminCategories />} />
-            <Route path="/admin/posts/new" element={<PostEditor />} />
-            <Route path="/admin/posts/edit/:id" element={<PostEditor />} />
+            <Route 
+              path="/admin" 
+              element={
+                <RequireAdmin allowedRoles={['admin', 'moderator', 'editor']}>
+                  <AdminDashboard />
+                </RequireAdmin>
+              } 
+            />
+            <Route 
+              path="/admin/posts" 
+              element={
+                <RequireAdmin allowedRoles={['admin', 'moderator', 'editor']}>
+                  <AdminPosts />
+                </RequireAdmin>
+              } 
+            />
+            <Route 
+              path="/admin/categories" 
+              element={
+                <RequireAdmin allowedRoles={['admin']}>
+                  <AdminCategories />
+                </RequireAdmin>
+              } 
+            />
+            <Route 
+              path="/admin/posts/new" 
+              element={
+                <RequireAdmin allowedRoles={['admin', 'editor']}>
+                  <PostEditor />
+                </RequireAdmin>
+              } 
+            />
+            <Route 
+              path="/admin/posts/edit/:id" 
+              element={
+                <RequireAdmin allowedRoles={['admin', 'editor']}>
+                  <PostEditor />
+                </RequireAdmin>
+              } 
+            />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
