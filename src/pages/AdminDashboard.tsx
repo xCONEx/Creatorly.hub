@@ -64,59 +64,66 @@ const AdminDashboard = () => {
 
   // Buscar dados reais do dashboard
   useEffect(() => {
+    if (!user) return; // Só busca se o usuário estiver carregado
     async function fetchStats() {
       setLoading(true);
-      // Buscar posts publicados
-      const { data: posts, error: postsError } = await supabase
-        .from('posts')
-        .select('id, title, views, likes, status, created_at, published_at')
-        .eq('status', 'published')
-        .order('published_at', { ascending: false });
-      if (postsError) {
-        toast({ title: 'Erro', description: 'Erro ao buscar posts', variant: 'destructive' });
+      setStats(null);
+      let errorMsg = '';
+      try {
+        // Buscar posts publicados
+        const { data: posts, error: postsError } = await supabase
+          .from('posts')
+          .select('id, title, views, likes, status, created_at, published_at')
+          .eq('status', 'published')
+          .order('published_at', { ascending: false });
+        if (postsError) {
+          errorMsg = 'Erro ao buscar posts: ' + postsError.message;
+          throw postsError;
+        }
+        // Total de posts publicados
+        const totalPosts = posts.length;
+        // Total de visualizações
+        const totalViews = posts.reduce((acc, p) => acc + (p.views || 0), 0);
+        // Total de curtidas
+        const totalLikes = posts.reduce((acc, p) => acc + (p.likes || 0), 0);
+        // Posts recentes (3 mais recentes)
+        const recentPosts = posts.slice(0, 3).map((p: any) => ({
+          id: p.id,
+          title: p.title,
+          views: p.views,
+          status: p.status,
+          created_at: p.published_at || p.created_at
+        }));
+        // Visualizações da semana: últimos 7 posts publicados
+        const weeklyViews = posts.slice(0, 7).map((p: any) => ({
+          date: p.published_at || p.created_at,
+          views: p.views
+        }));
+        // Buscar inscritos
+        const { count: subscribers, error: subError } = await supabase
+          .from('newsletter_subscribers')
+          .select('id', { count: 'exact', head: true });
+        if (subError) {
+          errorMsg = 'Erro ao buscar inscritos: ' + subError.message;
+          throw subError;
+        }
+        setStats({
+          totalPosts,
+          totalViews,
+          totalLikes,
+          subscribers: subscribers || 0,
+          recentPosts,
+          weeklyViews
+        });
+      } catch (err) {
+        setStats(null);
+        toast({ title: 'Erro', description: errorMsg || 'Erro ao carregar dashboard', variant: 'destructive' });
+      } finally {
         setLoading(false);
-        return;
       }
-      // Total de posts publicados
-      const totalPosts = posts.length;
-      // Total de visualizações
-      const totalViews = posts.reduce((acc, p) => acc + (p.views || 0), 0);
-      // Total de curtidas
-      const totalLikes = posts.reduce((acc, p) => acc + (p.likes || 0), 0);
-      // Posts recentes (3 mais recentes)
-      const recentPosts = posts.slice(0, 3).map((p: any) => ({
-        id: p.id,
-        title: p.title,
-        views: p.views,
-        status: p.status,
-        created_at: p.published_at || p.created_at
-      }));
-      // Visualizações da semana: últimos 7 posts publicados
-      const weeklyViews = posts.slice(0, 7).map((p: any) => ({
-        date: p.published_at || p.created_at,
-        views: p.views
-      }));
-      // Buscar inscritos
-      const { count: subscribers, error: subError } = await supabase
-        .from('newsletter_subscribers')
-        .select('id', { count: 'exact', head: true });
-      if (subError) {
-        toast({ title: 'Erro', description: 'Erro ao buscar inscritos', variant: 'destructive' });
-        setLoading(false);
-        return;
-      }
-      setStats({
-        totalPosts,
-        totalViews,
-        totalLikes,
-        subscribers: subscribers || 0,
-        recentPosts,
-        weeklyViews
-      });
-      setLoading(false);
     }
     fetchStats();
-  }, []);
+  }, [user]);
 
   const handleGenerateCode = async () => {
     setGenerating(true);
@@ -332,6 +339,13 @@ const AdminDashboard = () => {
                   </tbody>
                 </table>
               </div>
+            </div>
+          )}
+
+          {/* Exibir erro na tela se stats for null e não estiver carregando */}
+          {!loading && !stats && (
+            <div className="text-destructive text-center my-8">
+              Erro ao carregar dados do dashboard. Verifique sua conexão ou permissões.
             </div>
           )}
 
