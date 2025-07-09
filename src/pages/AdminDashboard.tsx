@@ -71,14 +71,33 @@ const AdminDashboard = () => {
       let errorMsg = '';
       try {
         // Buscar posts publicados
-        const { data: posts, error: postsError } = await supabase
-          .from('posts')
-          .select('id, title, views, likes, status, created_at, published_at')
-          .eq('status', 'published')
-          .order('published_at', { ascending: false });
-        if (postsError) {
-          errorMsg = 'Erro ao buscar posts: ' + postsError.message;
-          throw postsError;
+        let posts: any[] = [];
+        try {
+          const { data: publishedPosts, error: postsError } = await supabase
+            .from('posts')
+            .select('id, title, views, likes, status, created_at, published_at')
+            .eq('status', 'published')
+            .order('published_at', { ascending: false });
+          
+          if (postsError) {
+            console.error('Erro ao buscar posts publicados:', postsError);
+            // Se não conseguir buscar posts publicados, tenta buscar todos os posts
+            const { data: allPosts, error: allPostsError } = await supabase
+              .from('posts')
+              .select('id, title, views, likes, status, created_at, published_at')
+              .order('created_at', { ascending: false });
+            
+            if (allPostsError) {
+              errorMsg = 'Erro ao buscar posts: ' + allPostsError.message;
+              throw allPostsError;
+            }
+            posts = allPosts || [];
+          } else {
+            posts = publishedPosts || [];
+          }
+        } catch (error) {
+          console.error('Erro na consulta de posts:', error);
+          posts = []; // Fallback para array vazio
         }
         // Total de posts publicados
         const totalPosts = posts.length;
