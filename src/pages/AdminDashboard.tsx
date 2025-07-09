@@ -49,11 +49,7 @@ const AdminDashboard = () => {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (!user) {
-      navigate('/admin/login');
-    }
-  }, [user, navigate]);
+  // Removido verificação de usuário - RequireAdmin já faz isso
 
   // Carregar códigos de convite se for admin master
   useEffect(() => {
@@ -183,11 +179,10 @@ const AdminDashboard = () => {
     navigate('/');
   };
 
-  if (!user) return null;
+  // Removido verificação de usuário - RequireAdmin já faz isso
 
   return (
-    <RequireAdmin>
-      <div className="min-h-screen bg-gradient-hero">
+    <div className="min-h-screen bg-gradient-hero">
         {/* Header */}
         <header className="border-b border-border bg-background/95 backdrop-blur">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -416,7 +411,6 @@ const AdminDashboard = () => {
           </div>
         </div>
       </div>
-    </RequireAdmin>
   );
 };
 
