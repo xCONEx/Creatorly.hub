@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Clock, Eye, Heart, Calendar, User, ArrowLeft } from 'lucide-react';
+import Footer from '@/components/Footer';
 
 const BlogPost: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -188,6 +189,7 @@ const BlogPost: React.FC = () => {
           )}
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
