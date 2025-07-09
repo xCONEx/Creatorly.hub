@@ -49,8 +49,12 @@ const AdminPosts = () => {
     setLoading(false);
   }
 
-  async function handleDelete(id: string) {
-    if (!window.confirm('Tem certeza que deseja remover este post?')) return;
+  async function handleDelete(id: string, title: string) {
+    const confirm = window.prompt(`Para remover o post "${title}", digite REMOVER e confirme:`);
+    if (confirm !== 'REMOVER') {
+      toast({ title: 'Remoção cancelada', description: 'Ação não confirmada.', variant: 'default' });
+      return;
+    }
     const { error } = await supabase.from('posts').delete().eq('id', id);
     if (error) {
       toast({ title: 'Erro ao remover', description: error.message, variant: 'destructive' });
@@ -186,7 +190,7 @@ const AdminPosts = () => {
                           </Button>
                         </Link>
                         {(user?.role === 'admin' || user?.role === 'moderator') && (
-                          <Button variant="outline" size="sm" className="text-destructive hover:text-destructive" onClick={() => handleDelete(post.id)}>
+                          <Button variant="outline" size="sm" className="text-destructive hover:text-destructive" onClick={() => handleDelete(post.id, post.title)}>
                             <Trash2 className="h-4 w-4" />
                           </Button>
                         )}
