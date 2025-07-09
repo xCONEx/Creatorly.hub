@@ -5,6 +5,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from '@/hooks/use-toast';
+import { useNavigate, Link } from 'react-router-dom';
+import { LogOut, ArrowLeft } from 'lucide-react';
+import RequireAdmin from '@/components/RequireAdmin';
 
 interface Category {
   id: string;
@@ -16,7 +19,8 @@ interface Category {
 }
 
 const AdminCategories = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState<Category | null>(null);
@@ -76,12 +80,54 @@ const AdminCategories = () => {
     fetchCategories();
   }
 
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-hero p-4">
-      <Card className="max-w-2xl mx-auto">
-        <CardHeader>
-          <CardTitle>Categorias</CardTitle>
-        </CardHeader>
+    <RequireAdmin>
+      <div className="min-h-screen bg-gradient-hero">
+        {/* Header */}
+        <header className="border-b border-border bg-background/95 backdrop-blur">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center h-16">
+              <div className="flex items-center space-x-4">
+                <Link to="/admin" className="flex items-center space-x-2">
+                  <ArrowLeft className="h-4 w-4" />
+                  <span className="text-sm">Voltar ao Dashboard</span>
+                </Link>
+                <Link to="/" className="flex items-center space-x-2">
+                  <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">C</span>
+                  </div>
+                  <span className="text-xl font-bold text-foreground">Creatorly Admin</span>
+                </Link>
+              </div>
+              
+              <div className="flex items-center space-x-4">
+                <span className="text-sm text-muted-foreground">
+                  Olá, {user?.name}
+                </span>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={handleLogout}
+                  className="hover:bg-destructive hover:text-destructive-foreground"
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Sair
+                </Button>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <Card className="bg-gradient-card shadow-elegant border-primary/10">
+            <CardHeader>
+              <CardTitle className="text-2xl">Gerenciar Categorias</CardTitle>
+            </CardHeader>
         <CardContent>
           {isEditor && (
             <form className="mb-6 space-y-2" onSubmit={handleSave}>
@@ -125,7 +171,9 @@ const AdminCategories = () => {
           )}
         </CardContent>
       </Card>
-    </div>
+        </div>
+      </div>
+    </RequireAdmin>
   );
 };
 
