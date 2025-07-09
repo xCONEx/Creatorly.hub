@@ -13,6 +13,8 @@ import { Save, Eye, ArrowLeft, Upload } from 'lucide-react';
 import RequireAdmin from '@/components/RequireAdmin';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/lib/supabaseClient';
+import RichTextEditor from '@/components/RichTextEditor';
+import ChatGPTImporter from '@/components/ChatGPTImporter';
 
 interface PostData {
   title: string;
@@ -55,6 +57,7 @@ const PostEditor = () => {
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [oldImageUrl, setOldImageUrl] = useState<string | null>(null);
+  const [showChatGPTImporter, setShowChatGPTImporter] = useState(false);
 
   useEffect(() => {
     fetchCategories();
@@ -130,46 +133,93 @@ const PostEditor = () => {
 
   const removeImageFromStorage = useCallback(async (url: string | null) => {
     if (!url) return;
-    const match = url.match(/public\/([^?]+)/);
+    // Extrair o caminho do arquivo da URL
+    const match = url.match(/posts\/([^?]+)/);
     if (!match) return;
     const path = match[1];
-    await supabase.storage.from('public').remove([path]);
+    try {
+      await supabase.storage.from('posts').remove([path]);
+    } catch (error) {
+      console.error('Erro ao remover imagem:', error);
+    }
   }, []);
 
   const handleSave = async (status: 'draft' | 'published') => {
     setSaving(true);
+    
+    // Validar campos obrigatórios
+    if (!postData.title || !postData.slug || !postData.category_id) {
+      toast({ 
+        title: 'Preencha todos os campos obrigatórios', 
+        description: 'Título, URL e categoria são obrigatórios',
+        variant: 'destructive' 
+      });
+      setSaving(false);
+      return;
+    }
+    
     const payload = {
       ...postData,
       status,
       author_id: user?.id,
       updated_at: new Date().toISOString(),
     };
-    if (!payload.title || !payload.slug || !payload.category_id) {
-      toast({ title: 'Preencha todos os campos obrigatórios', variant: 'destructive' });
-      setSaving(false);
-      return;
-    }
+    
     try {
       if (isEditing) {
         // Se imagem mudou, remove a antiga
         if (oldImageUrl && oldImageUrl !== postData.featured_image) {
           await removeImageFromStorage(oldImageUrl);
         }
-        const { error } = await supabase.from('posts').update(payload).eq('id', id);
-        if (error) throw error;
-        toast({ title: 'Post atualizado!', description: `O post foi ${status === 'published' ? 'publicado' : 'salvo como rascunho'} com sucesso.` });
-      } else {
-        const { error } = await supabase.from('posts').insert({
-          ...payload,
-          created_at: new Date().toISOString(),
-          published_at: status === 'published' ? new Date().toISOString() : null
+        
+        const { error } = await supabase
+          .from('posts')
+          .update(payload)
+          .eq('id', id);
+          
+        if (error) {
+          console.error('Erro ao atualizar post:', error);
+          if (error.code === '42501') {
+            throw new Error('Você não tem permissão para editar posts');
+          }
+          throw error;
+        }
+        
+        toast({ 
+          title: 'Post atualizado!', 
+          description: `O post foi ${status === 'published' ? 'publicado' : 'salvo como rascunho'} com sucesso.` 
         });
-        if (error) throw error;
-        toast({ title: 'Post criado!', description: `O post foi ${status === 'published' ? 'publicado' : 'salvo como rascunho'} com sucesso.` });
+      } else {
+        const { error } = await supabase
+          .from('posts')
+          .insert({
+            ...payload,
+            created_at: new Date().toISOString(),
+            published_at: status === 'published' ? new Date().toISOString() : null
+          });
+          
+        if (error) {
+          console.error('Erro ao criar post:', error);
+          if (error.code === '42501') {
+            throw new Error('Você não tem permissão para criar posts');
+          }
+          throw error;
+        }
+        
+        toast({ 
+          title: 'Post criado!', 
+          description: `O post foi ${status === 'published' ? 'publicado' : 'salvo como rascunho'} com sucesso.` 
+        });
       }
+      
       navigate('/admin/posts');
     } catch (error: any) {
-      toast({ title: 'Erro', description: error.message, variant: 'destructive' });
+      console.error('Erro completo:', error);
+      toast({ 
+        title: 'Erro ao salvar', 
+        description: error.message || 'Ocorreu um erro inesperado', 
+        variant: 'destructive' 
+      });
     } finally {
       setSaving(false);
     }
@@ -178,29 +228,80 @@ const PostEditor = () => {
   async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
+    
+    // Validar tipo e tamanho do arquivo
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      toast({ 
+        title: 'Tipo de arquivo não suportado', 
+        description: 'Use apenas imagens JPEG, PNG ou WebP', 
+        variant: 'destructive' 
+      });
+      return;
+    }
+    
+    if (file.size > 5 * 1024 * 1024) { // 5MB
+      toast({ 
+        title: 'Arquivo muito grande', 
+        description: 'A imagem deve ter menos de 5MB', 
+        variant: 'destructive' 
+      });
+      return;
+    }
+    
     setUploading(true);
     setUploadProgress(0);
-    // Remove imagem anterior se houver
-    if (postData.featured_image) {
-      await removeImageFromStorage(postData.featured_image);
-    }
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
-    const filePath = `posts/${fileName}`;
-    // Supabase não suporta onUploadProgress, então removemos
-    const { data, error } = await supabase.storage.from('public').upload(filePath, file, {
-      cacheControl: '3600',
-      upsert: false
-    });
-    if (error) {
-      toast({ title: 'Erro ao fazer upload', description: error.message, variant: 'destructive' });
-    } else {
-      const { data: urlData } = supabase.storage.from('public').getPublicUrl(filePath);
+    
+    try {
+      // Remove imagem anterior se houver
+      if (postData.featured_image) {
+        await removeImageFromStorage(postData.featured_image);
+      }
+      
+      const fileExt = file.name.split('.').pop()?.toLowerCase();
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
+      const filePath = `posts/${fileName}`;
+      
+      // Upload para o bucket 'posts' em vez de 'public'
+      const { data, error } = await supabase.storage
+        .from('posts')
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
+        
+      if (error) {
+        console.error('Erro no upload:', error);
+        toast({ 
+          title: 'Erro ao fazer upload', 
+          description: error.message, 
+          variant: 'destructive' 
+        });
+        return;
+      }
+      
+      // Obter URL pública da imagem
+      const { data: urlData } = supabase.storage
+        .from('posts')
+        .getPublicUrl(filePath);
+        
       setPostData(prev => ({ ...prev, featured_image: urlData.publicUrl }));
-      toast({ title: 'Imagem enviada!', description: 'A imagem foi enviada com sucesso.' });
+      toast({ 
+        title: 'Imagem enviada!', 
+        description: 'A imagem foi enviada com sucesso.' 
+      });
+      
+    } catch (error: any) {
+      console.error('Erro inesperado:', error);
+      toast({ 
+        title: 'Erro inesperado', 
+        description: 'Ocorreu um erro durante o upload', 
+        variant: 'destructive' 
+      });
+    } finally {
+      setUploading(false);
+      setUploadProgress(0);
     }
-    setUploading(false);
-    setUploadProgress(0);
   }
 
   const handleCancel = async () => {
@@ -291,18 +392,26 @@ const PostEditor = () => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="content">Conteúdo *</Label>
-                    <Textarea
-                      id="content"
+                    <div className="flex items-center justify-between mb-2">
+                      <Label htmlFor="content">Conteúdo *</Label>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setShowChatGPTImporter(true)}
+                        className="text-xs"
+                      >
+                        Importar do ChatGPT
+                      </Button>
+                    </div>
+                    <RichTextEditor
                       value={postData.content}
-                      onChange={(e) => handleContentChange(e.target.value)}
+                      onChange={(content) => handleContentChange(content)}
                       placeholder="Escreva o conteúdo do post aqui..."
-                      rows={20}
-                      className="font-mono"
-                      required
+                      className="min-h-[400px]"
                     />
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Suporte a HTML/Markdown. Tempo de leitura estimado: {postData.read_time} min
+                    <p className="text-xs text-muted-foreground mt-2">
+                      Use a barra de ferramentas para formatar o texto. Suporte a HTML. Tempo de leitura estimado: {postData.read_time} min
                     </p>
                   </div>
                 </CardContent>
@@ -405,6 +514,16 @@ const PostEditor = () => {
             </div>
           </div>
         </div>
+        
+        {/* ChatGPT Importer */}
+        <ChatGPTImporter
+          isOpen={showChatGPTImporter}
+          onClose={() => setShowChatGPTImporter(false)}
+          onImport={(content) => {
+            setPostData(prev => ({ ...prev, content }));
+            setShowChatGPTImporter(false);
+          }}
+        />
       </div>
     </RequireAdmin>
   );
