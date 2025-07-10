@@ -43,13 +43,29 @@ const Index = () => {
               {/* Social Proof */}
               <div className="flex items-center gap-6 justify-center lg:justify-start">
                 <div className="flex -space-x-2">
-                  <div className="w-8 h-8 rounded-full bg-blue-500"></div>
-                  <div className="w-8 h-8 rounded-full bg-purple-500"></div>
-                  <div className="w-8 h-8 rounded-full bg-green-500"></div>
-                  <div className="w-8 h-8 rounded-full bg-orange-500"></div>
+                  <img 
+                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=32&h=32&fit=crop&crop=face" 
+                    alt="Criador 1" 
+                    className="w-8 h-8 rounded-full object-cover border-2 border-white shadow-sm"
+                  />
+                  <img 
+                    src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=32&h=32&fit=crop&crop=face" 
+                    alt="Criadora 2" 
+                    className="w-8 h-8 rounded-full object-cover border-2 border-white shadow-sm"
+                  />
+                  <img 
+                    src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=32&h=32&fit=crop&crop=face" 
+                    alt="Criador 3" 
+                    className="w-8 h-8 rounded-full object-cover border-2 border-white shadow-sm"
+                  />
+                  <img 
+                    src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=32&h=32&fit=crop&crop=face" 
+                    alt="Criadora 4" 
+                    className="w-8 h-8 rounded-full object-cover border-2 border-white shadow-sm"
+                  />
                 </div>
                 <div className="text-sm text-muted-foreground">
-                  <span className="font-semibold">+1.2k criadores</span>
+                  <span className="font-semibold text-primary">Junte-se a nós agora!</span>
                 </div>
                 <div className="flex items-center gap-1">
                   {[...Array(5)].map((_, i) => (
@@ -135,7 +151,7 @@ const Index = () => {
                 </div>
               </div>
 
-             <Link to="/financeflow">
+              <Link to="/financeflow">
                 <Button size="lg" className="bg-gradient-primary hover:shadow-glow transition-all duration-300">
                   <TrendingUp className="mr-2 h-5 w-5" />
                   Acessar FinanceFlow
