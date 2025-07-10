@@ -440,6 +440,7 @@ const FinanceFlowSales = () => {
           </div>
           <div className="text-center text-gray-500">
             <p>&copy; 2025 FinanceFlow. Todos os direitos reservados.</p>
+            <p>by CreatorlyHub</p>
           </div>
         </div>
       </footer>
