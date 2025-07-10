@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 
 const AnimatedText = () => {
-  const words = ['criadores', 'Produtoras', 'Freelancers'];
+  const words = ['Criadores', 'Produtoras', 'Freelancers'];
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
 
