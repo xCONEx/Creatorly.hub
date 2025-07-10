@@ -18,6 +18,7 @@ import NotFound from "./pages/NotFound";
 import FinanceFlowSales from "./pages/FinanceFlowSales";
 import OrcaFacilSales from "./pages/OrcaFacilSales";
 import ContratProSales from "./pages/ContratProSales";
+import BlogCategory from "./pages/BlogCategory";
 
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/categoria/:slug" element={<BlogCategory />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/financeflow" element={<FinanceFlowSales />} />
             <Route path="/orcafacil" element={<OrcaFacilSales />} />
