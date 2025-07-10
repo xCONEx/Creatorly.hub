@@ -624,10 +624,10 @@ const Index = () => {
           </div>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" variant="secondary" className="bg-white text-primary hover:bg-white/90 transition-all duration-300">
+{/*             <Button size="lg" variant="secondary" className="bg-white text-primary hover:bg-white/90 transition-all duration-300">
               Começar Gratuitamente
               <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+            </Button> */}
             <Link to="/blog">
               <Button variant="outline" size="lg" className="bg-white text-primary hover:bg-white/90 transition-all duration-300">
                 Ler o Blog
