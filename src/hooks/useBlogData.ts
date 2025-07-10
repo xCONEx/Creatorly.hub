@@ -157,9 +157,19 @@ export const useBlogData = () => {
     return enrichPosts(filteredPosts);
   };
 
+  // Função para enriquecer categorias com post_count calculado se não existir
+  const getCategoriesWithPostCount = () => {
+    return categories.map(cat => ({
+      ...cat,
+      post_count: typeof cat.post_count === 'number'
+        ? cat.post_count
+        : posts.filter(post => post.category_id === cat.id && post.status === 'published').length
+    }));
+  };
+
   return {
     posts,
-    categories,
+    categories: getCategoriesWithPostCount(),
     loading,
     getPostBySlug,
     getPostsByCategory,
