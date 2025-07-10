@@ -629,7 +629,7 @@ const Index = () => {
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
             <Link to="/blog">
-              <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-primary transition-all duration-300">
+              <Button variant="outline" size="lg" className="text-primary border-white text-white hover:bg-white hover:text-primary transition-all duration-300">
                 Ler o Blog
               </Button>
             </Link>
