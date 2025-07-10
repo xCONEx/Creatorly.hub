@@ -116,18 +116,18 @@ const Blog = () => {
       {/* Categories */}
       <section className="py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-2xl font-bold text-foreground mb-8">Categorias em Destaque</h2>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <h2 className="text-2xl font-bold text-foreground mb-8 animate-fade-in">Categorias em Destaque</h2>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 animate-fade-in-up">
             {categories.map((category) => (
-              <Link key={category.id} to={`/blog/categoria/${category.slug}`}>
-                <Card className="cursor-pointer hover:shadow-card transition-all duration-300 bg-gradient-card border-primary/10">
+              <Link key={category.id} to={`/blog/categoria/${category.slug}`}> 
+                <Card className="cursor-pointer hover:shadow-card transition-all duration-300 bg-gradient-card border-primary/10 group animate-fade-in-up">
                   <CardContent className="p-6 text-center">
-                    <div className={`w-12 h-12 ${category.color} rounded-full mx-auto mb-3 flex items-center justify-center`}>
+                    <div className={`w-12 h-12 ${category.color} rounded-full mx-auto mb-3 flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
                       <span className="text-white font-bold text-lg">
                         {category.name.charAt(0)}
                       </span>
                     </div>
-                    <h3 className="font-semibold text-foreground mb-1">{category.name}</h3>
+                    <h3 className="font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">{category.name}</h3>
                     <p className="text-sm text-muted-foreground">{category.post_count} artigos</p>
                   </CardContent>
                 </Card>
@@ -140,10 +140,15 @@ const Blog = () => {
       {/* Recent Articles */}
       <section className="py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-2xl font-bold text-foreground mb-8">Artigos Recentes</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <h2 className="text-2xl font-bold text-foreground mb-8 animate-fade-in">Artigos Recentes</h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 animate-fade-in-up">
+            {recentPosts.length === 0 && (
+              <div className="col-span-full text-center text-muted-foreground text-lg py-12 animate-fade-in">
+                Nenhum artigo recente encontrado.
+              </div>
+            )}
             {recentPosts.map((post) => (
-              <Card key={post.id} className="overflow-hidden bg-gradient-card shadow-card border-primary/10 hover:shadow-elegant transition-all duration-300 group">
+              <Card key={post.id} className="overflow-hidden bg-gradient-card shadow-card border-primary/10 hover:shadow-elegant transition-all duration-300 group animate-fade-in-up">
                 <div className="relative overflow-hidden">
                   <img
                     src={post.featured_image}
