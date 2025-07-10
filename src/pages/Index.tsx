@@ -151,12 +151,16 @@ const Index = () => {
                 </div>
               </div>
 
-              <Link to="/financeflow">
+             <a
+  href="/financeflow"
+  target="_blank"
+  rel="noopener noreferrer"
+>
                 <Button size="lg" className="bg-gradient-primary hover:shadow-glow transition-all duration-300">
                   <TrendingUp className="mr-2 h-5 w-5" />
                   Acessar FinanceFlow
                 </Button>
-              </Link>
+              </a>
             </div>
 
             {/* Right Side - Dashboard Preview */}
@@ -298,12 +302,17 @@ const Index = () => {
                 </div>
               </div>
 
-              <Link to="/orcafacil">
+              
+                <a
+  href="/orcafacil"
+  target="_blank"
+  rel="noopener noreferrer"
+>
                 <Button size="lg" className="bg-gradient-primary hover:shadow-glow transition-all duration-300">
                   <Zap className="mr-2 h-5 w-5" />
                   Acessar OrçaFácil
                 </Button>
-              </Link>
+              </a>
             </div>
 
             {/* Right Side - OrçaFácil Preview */}
@@ -415,12 +424,17 @@ const Index = () => {
                 </div>
               </div>
 
-              <Link to="/contratpro">
+              
+ <a
+  href="/contratpro"
+  target="_blank"
+  rel="noopener noreferrer"
+>
                 <Button size="lg" className="bg-gradient-primary hover:shadow-glow transition-all duration-300">
                   <FileText className="mr-2 h-5 w-5" />
                   Acessar ContratPro
                 </Button>
-              </Link>
+              </a>
             </div>
 
             {/* Right Side - ContratPro Preview */}
