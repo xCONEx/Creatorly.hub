@@ -361,7 +361,7 @@ const OrcaFacilSales = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Básico */}
-            <Card className="p-6 relative">
+            <Card className="p-6 relative transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
               <CardContent className="p-0">
                 <h3 className="text-xl font-semibold mb-2">Básico</h3>
                 <div className="mb-4">
@@ -375,12 +375,14 @@ const OrcaFacilSales = () => {
                   <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Gestão básica de clientes</span></li>
                   <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Exportação em PDF</span></li>
                 </ul>
-                <Button className="w-full" variant="outline">Assinar Básico</Button>
+                <a href="https://pay.cakto.com.br/33chw64" target="_blank" rel="noopener noreferrer" className="w-full block">
+                  <Button className="w-full" variant="outline">Assinar Básico</Button>
+                </a>
               </CardContent>
             </Card>
 
             {/* Profissional */}
-            <Card className="p-6 relative border-orange-500 border-2">
+            <Card className="p-6 relative border-orange-500 border-2 transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
               <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
                 <span className="bg-orange-500 text-white px-4 py-1 rounded-full text-sm font-medium">Mais Popular</span>
               </div>
@@ -398,12 +400,14 @@ const OrcaFacilSales = () => {
                   <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Backup dos orçamentos</span></li>
                   <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Analytics básico</span></li>
                 </ul>
-                <Button className="w-full bg-orange-500 hover:bg-orange-600">Assinar Profissional</Button>
+                <a href="https://pay.cakto.com.br/c4jwped" target="_blank" rel="noopener noreferrer" className="w-full block">
+                  <Button className="w-full bg-orange-500 hover:bg-orange-600">Assinar Profissional</Button>
+                </a>
               </CardContent>
             </Card>
 
             {/* Empresarial */}
-            <Card className="p-6 relative">
+            <Card className="p-6 relative transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
               <CardContent className="p-0">
                 <h3 className="text-xl font-semibold mb-2">Empresarial</h3>
                 <div className="mb-4">
@@ -417,7 +421,9 @@ const OrcaFacilSales = () => {
                   <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Backup completo</span></li>
                   <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Suporte prioritário</span></li>
                 </ul>
-                <Button className="w-full" variant="outline">Assinar Empresarial</Button>
+                <a href="https://pay.cakto.com.br/3b6s5eo" target="_blank" rel="noopener noreferrer" className="w-full block">
+                  <Button className="w-full" variant="outline">Assinar Empresarial</Button>
+                </a>
               </CardContent>
             </Card>
           </div>
