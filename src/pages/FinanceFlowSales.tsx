@@ -336,7 +336,14 @@ const FinanceFlowSales = () => {
                   <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Relatórios personalizados</span></li>
                   <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Backup automático</span></li>
                 </ul>
-                <Button className="w-full bg-blue-600 hover:bg-blue-700">Começar Agora</Button>
+                <a
+  href="https://finance.creatorlyhub.com.br"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="w-full inline-flex items-center justify-center px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-md text-sm font-medium"
+>
+  Começar Agora
+</a>
               </CardContent>
             </Card>
 
@@ -372,13 +379,17 @@ const FinanceFlowSales = () => {
           <p className="text-xl text-blue-100 mb-8">
             Junte-se a milhares de empresas que já revolucionaram sua gestão financeira
           </p>
-          
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-            <Button size="lg" variant="secondary" className="bg-white text-blue-600 hover:bg-gray-100">
-              Começar teste grátis de 7 dias
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-          </div>
+  <a
+    href="https://finance.creatorlyhub.com.br"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="inline-flex items-center justify-center px-6 py-3 text-lg font-medium bg-white text-blue-600 hover:bg-gray-100 rounded-md border border-gray-300"
+  >
+    Começar grátis
+    <ArrowRight className="ml-2 h-5 w-5" />
+  </a>
+</div>
 
           <div className="flex items-center justify-center gap-6 text-blue-100">
             <div className="flex items-center gap-2">
