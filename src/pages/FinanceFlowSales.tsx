@@ -313,7 +313,10 @@ const FinanceFlowSales = () => {
                   <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Calculadora de preços</span></li>
                   <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Suporte prioritário</span></li>
                 </ul>
-                <Button className="w-full" variant="outline">Começar Agora</Button>
+                <a
+  href="https://finance.creatorlyhub.com.br"
+  target="_blank"
+  rel="noopener noreferrer" className="w-full" variant="outline">Começar Agora</a>
               </CardContent>
             </Card>
 
@@ -363,7 +366,10 @@ const FinanceFlowSales = () => {
                   <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>SLA garantido</span></li>
                   <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Customizações sob demanda</span></li>
                 </ul>
-                <Button className="w-full" variant="outline">Começar Agora</Button>
+                <a
+  href="https://finance.creatorlyhub.com.br"
+  target="_blank"
+  rel="noopener noreferrer" className="w-full" variant="outline">Começar Agora</a>
               </CardContent>
             </Card>
           </div>
