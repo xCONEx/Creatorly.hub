@@ -151,16 +151,12 @@ const Index = () => {
                 </div>
               </div>
 
-             <a
-  href="/financeflow"
-  target="_blank"
-  rel="noopener noreferrer"
->
+              <Link to="/financeflow">
                 <Button size="lg" className="bg-gradient-primary hover:shadow-glow transition-all duration-300">
                   <TrendingUp className="mr-2 h-5 w-5" />
                   Acessar FinanceFlow
                 </Button>
-              </a>
+              </Link>
             </div>
 
             {/* Right Side - Dashboard Preview */}
@@ -302,17 +298,12 @@ const Index = () => {
                 </div>
               </div>
 
-              
-                <a
-  href="/orcafacil"
-  target="_blank"
-  rel="noopener noreferrer"
->
+              <Link to="/orcafacil">
                 <Button size="lg" className="bg-gradient-primary hover:shadow-glow transition-all duration-300">
                   <Zap className="mr-2 h-5 w-5" />
                   Acessar OrçaFácil
                 </Button>
-              </a>
+              </Link>
             </div>
 
             {/* Right Side - OrçaFácil Preview */}
@@ -424,17 +415,12 @@ const Index = () => {
                 </div>
               </div>
 
-              
- <a
-  href="/contratpro"
-  target="_blank"
-  rel="noopener noreferrer"
->
+              <Link to="/contratpro">
                 <Button size="lg" className="bg-gradient-primary hover:shadow-glow transition-all duration-300">
                   <FileText className="mr-2 h-5 w-5" />
                   Acessar ContratPro
                 </Button>
-              </a>
+              </Link>
             </div>
 
             {/* Right Side - ContratPro Preview */}
@@ -624,12 +610,12 @@ const Index = () => {
           </div>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-{/*             <Button size="lg" variant="secondary" className="bg-white text-primary hover:bg-white/90 transition-all duration-300">
+            <Button size="lg" variant="secondary" className="bg-white text-primary hover:bg-white/90 transition-all duration-300">
               Começar Gratuitamente
               <ArrowRight className="ml-2 h-5 w-5" />
-            </Button> */}
+            </Button>
             <Link to="/blog">
-              <Button variant="outline" size="lg" className="bg-white text-primary hover:bg-white/90 transition-all duration-300">
+              <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-primary transition-all duration-300">
                 Ler o Blog
               </Button>
             </Link>
@@ -693,6 +679,11 @@ const Index = () => {
 
           <div className="border-t mt-8 pt-8 text-center text-sm text-muted-foreground">
             <p>&copy; 2025 Creatorly Hub. Todos os direitos reservados.</p>
+            <div className="flex flex-col md:flex-row items-center justify-center gap-2 mt-2">
+              <a href="https://www.instagram.com/creatorlyhub/" target="_blank" rel="noopener noreferrer" className="hover:text-primary">Instagram: @creatorlyhub</a>
+              <span className="hidden md:inline">|</span>
+              <a href="mailto:contato@creatorlyhub.com.br" className="hover:text-primary">contato@creatorlyhub.com.br</a>
+            </div>
           </div>
         </div>
       </footer>
