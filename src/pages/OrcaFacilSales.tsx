@@ -352,105 +352,72 @@ const OrcaFacilSales = () => {
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Comece grátis e cresça conforme sua necessidade
+              Escolha o plano ideal para você
             </h2>
             <p className="text-xl text-gray-600">
-              Planos flexíveis para freelancers e agências
+              Comece grátis e escale conforme seu negócio cresce
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Básico */}
             <Card className="p-6 relative">
               <CardContent className="p-0">
-                <h3 className="text-xl font-semibold mb-2">Grátis</h3>
+                <h3 className="text-xl font-semibold mb-2">Básico</h3>
                 <div className="mb-4">
-                  <span className="text-3xl font-bold">R$ 0</span>
+                  <span className="text-3xl font-bold">R$ 19,90</span>
                   <span className="text-gray-500">/mês</span>
                 </div>
                 <ul className="space-y-3 mb-6">
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-green-500" />
-                    <span>5 orçamentos/mês</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-green-500" />
-                    <span>Templates básicos</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-green-500" />
-                    <span>PDF com marca OrçaFácil</span>
-                  </li>
+                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>100 PDFs por mês</span></li>
+                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>5 temas de cores</span></li>
+                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Upload de logo</span></li>
+                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Gestão básica de clientes</span></li>
+                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Exportação em PDF</span></li>
                 </ul>
-                <Button className="w-full" variant="outline">
-                  Começar grátis
-                </Button>
+                <Button className="w-full" variant="outline">Assinar Básico</Button>
               </CardContent>
             </Card>
 
+            {/* Profissional */}
             <Card className="p-6 relative border-orange-500 border-2">
               <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                <span className="bg-orange-500 text-white px-4 py-1 rounded-full text-sm font-medium">
-                  Mais Popular
-                </span>
+                <span className="bg-orange-500 text-white px-4 py-1 rounded-full text-sm font-medium">Mais Popular</span>
               </div>
               <CardContent className="p-0">
-                <h3 className="text-xl font-semibold mb-2">Pro</h3>
+                <h3 className="text-xl font-semibold mb-2">Profissional</h3>
                 <div className="mb-4">
-                  <span className="text-3xl font-bold">R$ 29</span>
+                  <span className="text-3xl font-bold">R$ 39,90</span>
                   <span className="text-gray-500">/mês</span>
                 </div>
                 <ul className="space-y-3 mb-6">
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-green-500" />
-                    <span>Orçamentos ilimitados</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-green-500" />
-                    <span>Todos os templates</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-green-500" />
-                    <span>Sua marca no PDF</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-green-500" />
-                    <span>Acompanhamento</span>
-                  </li>
+                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>1.000 PDFs por mês</span></li>
+                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Todos os recursos do plano Básico</span></li>
+                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Templates premium</span></li>
+                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Personalização de cores ilimitadas</span></li>
+                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Backup dos orçamentos</span></li>
+                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Analytics básico</span></li>
                 </ul>
-                <Button className="w-full bg-orange-500 hover:bg-orange-600">
-                  Começar agora
-                </Button>
+                <Button className="w-full bg-orange-500 hover:bg-orange-600">Assinar Profissional</Button>
               </CardContent>
             </Card>
 
+            {/* Empresarial */}
             <Card className="p-6 relative">
               <CardContent className="p-0">
-                <h3 className="text-xl font-semibold mb-2">Agência</h3>
+                <h3 className="text-xl font-semibold mb-2">Empresarial</h3>
                 <div className="mb-4">
-                  <span className="text-3xl font-bold">R$ 79</span>
+                  <span className="text-3xl font-bold">R$ 59,90</span>
                   <span className="text-gray-500">/mês</span>
                 </div>
                 <ul className="space-y-3 mb-6">
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-green-500" />
-                    <span>Tudo do Pro</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-green-500" />
-                    <span>5 usuários</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-green-500" />
-                    <span>Relatórios avançados</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-green-500" />
-                    <span>Suporte prioritário</span>
-                  </li>
+                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>PDFs ilimitados</span></li>
+                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Todos os recursos do Profissional</span></li>
+                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Analytics avançado</span></li>
+                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Backup completo</span></li>
+                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Suporte prioritário</span></li>
                 </ul>
-                <Button className="w-full" variant="outline">
-                  Falar com vendas
-                </Button>
+                <Button className="w-full" variant="outline">Assinar Empresarial</Button>
               </CardContent>
             </Card>
           </div>
@@ -503,6 +470,11 @@ const OrcaFacilSales = () => {
           <div className="text-center text-gray-500">
             <p>&copy; 2025 OrçaFácil. Todos os direitos reservados.</p>
             <p>by CreatorlyHub</p>
+            <div className="flex flex-col md:flex-row items-center justify-center gap-2 mt-2">
+              <a href="https://www.instagram.com/creatorlyhub/" target="_blank" rel="noopener noreferrer" className="hover:text-orange-500">Instagram: @creatorlyhub</a>
+              <span className="hidden md:inline">|</span>
+              <a href="mailto:contato@creatorlyhub.com.br" className="hover:text-orange-500">contato@creatorlyhub.com.br</a>
+            </div>
           </div>
         </div>
       </footer>
