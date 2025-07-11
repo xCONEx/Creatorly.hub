@@ -1,11 +1,20 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, Check, Star, TrendingUp, DollarSign, BarChart3, FileText, PieChart, Calculator, Smartphone, Users, Clock, Shield, Zap } from "lucide-react";
+import { ArrowRight, Check, Star, TrendingUp, DollarSign, BarChart3, FileText, PieChart, Calculator, Smartphone, Users, Clock, Shield, Zap, Home } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const FinanceFlowSales = () => {
   return (
     <div className="min-h-screen bg-background">
+      {/* Botão flutuante Home (apenas mobile) */}
+      <Link
+        to="/"
+        className="fixed bottom-6 right-6 z-50 bg-blue-600 text-white rounded-full shadow-lg p-4 md:hidden flex items-center justify-center hover:bg-blue-700 transition-colors"
+        aria-label="Ir para Home"
+      >
+        <Home className="h-6 w-6" />
+      </Link>
       {/* Header */}
       <header className="border-b bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -40,7 +49,10 @@ const FinanceFlowSales = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-lg px-8 py-4">
+              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-lg px-8 py-4" onClick={() => {
+                const el = document.getElementById('planos');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }}>
                 Quero transformar meu financeiro
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
@@ -286,7 +298,7 @@ const FinanceFlowSales = () => {
       </section>
 
       {/* Pricing */}
-      <section className="py-20 px-4">
+      <section id="planos" className="py-20 px-4">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
