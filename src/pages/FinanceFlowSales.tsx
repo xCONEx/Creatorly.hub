@@ -290,105 +290,73 @@ const FinanceFlowSales = () => {
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Planos que se adaptam ao seu negócio
+              Planos que se adaptam ao seu crescimento
             </h2>
             <p className="text-xl text-gray-600">
-              Escolha o plano ideal para o tamanho da sua empresa
+              Escolha o plano ideal para o seu momento
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Básico */}
             <Card className="p-6 relative">
               <CardContent className="p-0">
-                <h3 className="text-xl font-semibold mb-2">Starter</h3>
+                <h3 className="text-xl font-semibold mb-2">Básico</h3>
                 <div className="mb-4">
-                  <span className="text-3xl font-bold">R$ 29</span>
+                  <span className="text-3xl font-bold">R$ 29,90</span>
                   <span className="text-gray-500">/mês</span>
                 </div>
                 <ul className="space-y-3 mb-6">
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-green-500" />
-                    <span>Até 100 transações/mês</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-green-500" />
-                    <span>Relatórios básicos</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-green-500" />
-                    <span>Suporte por email</span>
-                  </li>
+                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Jobs ilimitados</span></li>
+                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Dashboard completo</span></li>
+                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Relatórios avançados</span></li>
+                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Calculadora de preços</span></li>
+                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Suporte prioritário</span></li>
                 </ul>
-                <Button className="w-full" variant="outline">
-                  Começar teste grátis
-                </Button>
+                <Button className="w-full" variant="outline">Começar Agora</Button>
               </CardContent>
             </Card>
 
+            {/* Premium */}
             <Card className="p-6 relative border-blue-500 border-2">
               <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                <span className="bg-blue-500 text-white px-4 py-1 rounded-full text-sm font-medium">
-                  Mais Popular
-                </span>
+                <span className="bg-blue-500 text-white px-4 py-1 rounded-full text-sm font-medium">Mais Popular</span>
               </div>
               <CardContent className="p-0">
-                <h3 className="text-xl font-semibold mb-2">Professional</h3>
+                <h3 className="text-xl font-semibold mb-2">Premium</h3>
                 <div className="mb-4">
-                  <span className="text-3xl font-bold">R$ 79</span>
+                  <span className="text-3xl font-bold">R$ 59,90</span>
                   <span className="text-gray-500">/mês</span>
                 </div>
                 <ul className="space-y-3 mb-6">
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-green-500" />
-                    <span>Transações ilimitadas</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-green-500" />
-                    <span>Todos os relatórios</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-green-500" />
-                    <span>Suporte prioritário</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-green-500" />
-                    <span>Integrações</span>
-                  </li>
+                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Inclui tudo do Básico +</span></li>
+                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Até 10 membros da equipe</span></li>
+                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Colaboração em tempo real</span></li>
+                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>API de integração</span></li>
+                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Relatórios personalizados</span></li>
+                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Backup automático</span></li>
                 </ul>
-                <Button className="w-full bg-blue-600 hover:bg-blue-700">
-                  Começar teste grátis
-                </Button>
+                <Button className="w-full bg-blue-600 hover:bg-blue-700">Começar Agora</Button>
               </CardContent>
             </Card>
 
+            {/* Enterprise */}
             <Card className="p-6 relative">
               <CardContent className="p-0">
                 <h3 className="text-xl font-semibold mb-2">Enterprise</h3>
                 <div className="mb-4">
-                  <span className="text-3xl font-bold">R$ 199</span>
+                  <span className="text-3xl font-bold">R$ 199,90</span>
                   <span className="text-gray-500">/mês</span>
                 </div>
                 <ul className="space-y-3 mb-6">
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-green-500" />
-                    <span>Tudo do Professional</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-green-500" />
-                    <span>Multi-empresas</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-green-500" />
-                    <span>Suporte 24/7</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-green-500" />
-                    <span>Onboarding personalizado</span>
-                  </li>
+                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Inclui tudo do Premium +</span></li>
+                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Equipe ilimitada</span></li>
+                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Suporte 24/7</span></li>
+                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Onboarding dedicado</span></li>
+                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>SLA garantido</span></li>
+                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Customizações sob demanda</span></li>
                 </ul>
-                <Button className="w-full" variant="outline">
-                  Falar com vendas
-                </Button>
+                <Button className="w-full" variant="outline">Começar Agora</Button>
               </CardContent>
             </Card>
           </div>
@@ -441,6 +409,11 @@ const FinanceFlowSales = () => {
           <div className="text-center text-gray-500">
             <p>&copy; 2025 FinanceFlow. Todos os direitos reservados.</p>
             <p>by CreatorlyHub</p>
+            <div className="flex flex-col md:flex-row items-center justify-center gap-2 mt-2">
+              <a href="https://www.instagram.com/creatorlyhub/" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600">Instagram: @creatorlyhub</a>
+              <span className="hidden md:inline">|</span>
+              <a href="mailto:contato@creatorlyhub.com.br" className="hover:text-blue-600">contato@creatorlyhub.com.br</a>
+            </div>
           </div>
         </div>
       </footer>
