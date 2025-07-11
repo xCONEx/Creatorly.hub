@@ -19,6 +19,7 @@ import FinanceFlowSales from "./pages/FinanceFlowSales";
 import OrcaFacilSales from "./pages/OrcaFacilSales";
 import ContratProSales from "./pages/ContratProSales";
 import BlogCategory from "./pages/BlogCategory";
+import ScrollToTop from "@/components/ScrollToTop";
 
 
 const queryClient = new QueryClient();
@@ -30,6 +31,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <ScrollToTop />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/blog" element={<Blog />} />
