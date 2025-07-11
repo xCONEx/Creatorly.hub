@@ -299,7 +299,7 @@ const FinanceFlowSales = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Básico */}
-            <Card className="p-6 relative">
+            <Card className="p-6 relative transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
               <CardContent className="p-0">
                 <h3 className="text-xl font-semibold mb-2">Básico</h3>
                 <div className="mb-4">
@@ -314,18 +314,18 @@ const FinanceFlowSales = () => {
                   <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Suporte prioritário</span></li>
                 </ul>
                 <a
-  href="https://finance.creatorlyhub.com.br"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="w-full inline-flex items-center justify-center px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-md text-sm font-medium"
->
-  Começar Agora
-</a>
+                  href="https://finance.creatorlyhub.com.br"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full block"
+                >
+                  <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white text-base py-3">Começar Agora</Button>
+                </a>
               </CardContent>
             </Card>
 
             {/* Premium */}
-            <Card className="p-6 relative border-blue-500 border-2">
+            <Card className="p-6 relative border-blue-500 border-2 transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
               <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
                 <span className="bg-blue-500 text-white px-4 py-1 rounded-full text-sm font-medium">Mais Popular</span>
               </div>
@@ -344,18 +344,18 @@ const FinanceFlowSales = () => {
                   <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Backup automático</span></li>
                 </ul>
                 <a
-  href="https://finance.creatorlyhub.com.br"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="w-full inline-flex items-center justify-center px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-md text-sm font-medium"
->
-  Começar Agora
-</a>
+                  href="https://finance.creatorlyhub.com.br"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full block"
+                >
+                  <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white text-base py-3">Começar Agora</Button>
+                </a>
               </CardContent>
             </Card>
 
             {/* Enterprise */}
-            <Card className="p-6 relative">
+            <Card className="p-6 relative transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
               <CardContent className="p-0">
                 <h3 className="text-xl font-semibold mb-2">Enterprise</h3>
                 <div className="mb-4">
@@ -371,13 +371,13 @@ const FinanceFlowSales = () => {
                   <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /><span>Customizações sob demanda</span></li>
                 </ul>
                 <a
-  href="https://finance.creatorlyhub.com.br"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="w-full inline-flex items-center justify-center px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-md text-sm font-medium"
->
-  Começar Agora
-</a>
+                  href="https://finance.creatorlyhub.com.br"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full block"
+                >
+                  <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white text-base py-3">Começar Agora</Button>
+                </a>
               </CardContent>
             </Card>
           </div>
